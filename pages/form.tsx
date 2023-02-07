@@ -14,11 +14,20 @@ export default function Form() {
     const json = await response.json();
     console.log(json);
   }
+
+  async function handleGetFiles() {
+    const response = await fetch('/api/get-files');
+    const json = await response.json();
+    console.log(json);
+  }
   
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="file" name="file" />
-      <button>Submit</button>
-    </form>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input type="file" name="file" />
+        <button>Submit</button>
+      </form>
+      <button onClick={handleGetFiles}>Get Files</button>
+    </div>
   );
 }
