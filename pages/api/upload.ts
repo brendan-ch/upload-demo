@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import fs from 'fs/promises';
+import fs from 'fs';
 import formidable, { File } from 'formidable';
 
 export const config = {
@@ -26,21 +26,15 @@ export default async function upload(req: NextApiRequest, res: NextApiResponse) 
   
   });  
 
-  try {
-    await fs.mkdir('./temp');
-  } catch(e) {
-
-  }
-
   const file = data.files.file as File;
   // file contains a path to the uploaded file
   console.log(file.filepath);
-  const tempFile = await fs.readFile(file.filepath);
-  await fs.writeFile(`./temp/${file.originalFilename}`, tempFile);
+  const tempFile = fs.readFileSync(file.filepath);
+  fs.writeFileSync(`/tmp/${file.originalFilename}`, tempFile);
 
   // to indicate that it's working,
   // return a list of files on the server
-  const files = await fs.readdir('./temp');
+  const files = fs.readdirSync('/tmp');
 
   return res.status(200).json({
     successful: true,
