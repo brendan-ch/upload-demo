@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import fs from 'fs/promises';
 import formidable, { File } from 'formidable';
-import PersistentFile from "formidable/PersistentFile";
 
 export const config = {
   api: {
@@ -25,10 +24,17 @@ export default async function upload(req: NextApiRequest, res: NextApiResponse) 
       resolve({ fields, files });
     });
   
-  });
+  });  
+
+  try {
+    await fs.mkdir('./temp');
+  } catch(e) {
+
+  }
 
   const file = data.files.file as File;
   // file contains a path to the uploaded file
+  console.log(file.filepath);
   const tempFile = await fs.readFile(file.filepath);
   await fs.writeFile(`./temp/${file.originalFilename}`, tempFile);
 
